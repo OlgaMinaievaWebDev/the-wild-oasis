@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { useEditCabin } from "./useEditCabin";
 import { useCreateCabin } from "./useCreateCabin";
 
-function CreateCabinForm(cabinToEdit = {}) {
+function CreateCabinForm({ cabinToEdit }) {
   const { isCreating, createCabin } = useCreateCabin();
   const { isEditing, editCabin } = useEditCabin();
   const isWorking = isCreating || isEditing;
