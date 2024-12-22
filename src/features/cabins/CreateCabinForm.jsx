@@ -7,7 +7,12 @@ import FormRow from "../../ui/FormRow";
 import { useForm } from "react-hook-form";
 import { useEditCabin } from "./useEditCabin";
 import { useCreateCabin } from "./useCreateCabin";
+
 function CreateCabinForm(cabinToEdit = {}) {
+  const { isCreating, createCabin } = useCreateCabin();
+  const { isEditing, editCabin } = useEditCabin();
+  const isWorking = isCreating || isEditing;
+
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
 
@@ -15,10 +20,6 @@ function CreateCabinForm(cabinToEdit = {}) {
     defaultValues: isEditSession ? editValues : {},
   });
   const { errors } = formState;
-  const { isCreating, createCabin } = useCreateCabin();
-  const { isEditing, editCabin } = useEditCabin();
-
-  const isWorking = isCreating || isEditing;
 
   function onSubmit(data) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
@@ -47,7 +48,7 @@ function CreateCabinForm(cabinToEdit = {}) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)} type="modal">
+    <Form onSubmit={handleSubmit(onSubmit, onError)}>
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -74,7 +75,7 @@ function CreateCabinForm(cabinToEdit = {}) {
         />
       </FormRow>
 
-      <FormRow label="Regular Price" error={errors?.regularPrice?.message}>
+      <FormRow label="Regular price" error={errors?.regularPrice?.message}>
         <Input
           type="number"
           id="regularPrice"
@@ -111,8 +112,8 @@ function CreateCabinForm(cabinToEdit = {}) {
         <Textarea
           type="number"
           id="description"
-          disabled={isWorking}
           defaultValue=""
+          disabled={isWorking}
           {...register("description", {
             required: "This field is required",
           })}
@@ -141,5 +142,4 @@ function CreateCabinForm(cabinToEdit = {}) {
     </Form>
   );
 }
-
 export default CreateCabinForm;
